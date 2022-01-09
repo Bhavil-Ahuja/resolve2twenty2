@@ -1,0 +1,123 @@
+<!-- <form action="/route/login" method="post">
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name">
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email">
+    <button type="submit">Login</button>
+</form>
+<a href="/route/register">Register here</a> -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>resolve2twenty2</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="/css/login.css" />
+    <script>
+        const fblogin = require("./fblogin")
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: "1994525030727853",
+                cookie: true,
+                xfbml: true,
+                version: "v11.0",
+            });
+
+            FB.AppEvents.logPageView();
+        };
+
+        (function (d, s, id) {
+            var js,
+                fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        })(document, "script", "facebook-jssdk");
+
+        function checkLoginState() {
+            FB.getLoginStatus(function (response) {
+                if (response.status == "connected") {
+                    const userid = response.authResponse.userID;
+                    FB.api("/me", { fields: "name, picture, email" }, function (res) {
+                        fblogin.findOne({uname: userid}, function(err, results) {
+                            if (!err && results && res.success) {
+                                location.href = "/route/dashboard"
+                            }
+                        })
+                        // document.getElementById("user").innerHTML = `
+                        //     <ul>
+                        //       <li>Name: ${res.name}</li>
+                        //       <li>Email: ${res.email}</li>
+                        //       <li>FB_ID: ${res.id}</li>
+                        //       <li>Photo: <img src="${res.picture.data.url}"/></li>
+                        //     `;
+                        // document.getElementById("login").remove();
+                    });
+                }
+            });
+        }
+
+        /*
+          {
+              status: 'connected',
+              authResponse: {
+                  accessToken: '...',
+                  expiresIn:'...',
+                  signedRequest:'...',
+                  userID:'...'
+              }
+          }
+          status specifies the login status of the person using the app. The status can be one of the following:
+          connected - the person is logged into Facebook, and has logged into your app.
+          not_authorized - the person is logged into Facebook, but has not logged into your app.
+          unknown - the person is not logged into Facebook, so you don't know if they've logged into your app or FB.logout() was called before and therefore, it cannot connect to Facebook.
+          authResponse is included if the status is connected and is made up of the following:
+          accessToken - contains an access token for the person using the app.
+          expiresIn - indicates the UNIX time when the token expires and needs to be renewed.
+          signedRequest - a signed parameter that contains information about the person using the app.
+          userID - the ID of the person using the app.
+          */
+    </script>
+</head>
+
+<body>
+    <h1>resolve2twenty2</h1>
+    <h2>Convert your Resolutions into your Goals</h2>
+    <br />
+    <div class="login">
+        <form id="login" method="post" action="/route/login">
+            <label><b>User Name </b> </label>
+            <input type="text" name="Uname" id="Uname" placeholder="Username" />
+            <br /><br />
+            <label><b>Password </b> </label>
+            <input type="Password" name="Pass" id="Pass" placeholder="Password" />
+            <br /><br />
+            <button type="submit" style="text-align: center;" class="btn" name="log" id="log"
+                value="Login">Login</button>
+            <!-- <input type="button" name="log" id="log" value="Login" class="btn" style="align-items: center" /> -->
+            <br /><br />
+            <input type="checkbox" id="check" />
+            <span>Remember me</span>
+            <br /><br />
+            <a href="#">Forgot Password?</a>
+        </form>
+        <h2>OR</h2>
+        <div class="login-socials">
+            <!-- <button class="loginBtn loginBtn--facebook">Login with Facebook</button> -->
+            <fb:login-button scope="public_profile,email" onlogin="checkLoginState();" class="fb-login">
+            </fb:login-button>
+            <!-- <button class="loginBtn loginBtn--google">Login with Google</button> -->
+        </div>
+        <a href="/route/register">New User?</a>
+    </div>
+    <h4>Your onestop destination to store all your promises.</h4>
+</body>
+
+</html>
